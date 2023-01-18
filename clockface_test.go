@@ -58,3 +58,33 @@ func simpleTime(hours, minutes, seconds int) time.Time {
 func testName(t time.Time) string {
 	return t.Format("15:04:05")
 }
+
+func TestSecondHandVector(t *testing.T) {
+	cases := []struct {
+		time  time.Time
+		point clockface.Point
+	}{
+		{simpleTime(0, 0, 30), clockface.Point{0, -1}},
+		{simpleTime(0, 0, 45), clockface.Point{-1, 0}},
+	}
+
+	for _, c := range cases {
+		t.Run(testName(c.time), func(t *testing.T) {
+			got := clockface.SecondHandPoint(c.time)
+			want := c.point
+
+			if !roughlyEqualPoint(got, want) {
+				t.Fatalf("got %v, want %v", got, want)
+			}
+		})
+	}
+}
+
+func roughlyEqualFloat64(a, b float64) bool {
+	const equalityThreshold = 1e-7
+	return math.Abs(a-b) < equalityThreshold
+}
+
+func roughlyEqualPoint(a, b clockface.Point) bool {
+	return roughlyEqualFloat64(a.X, b.X) && roughlyEqualFloat64(a.Y, b.Y)
+}
