@@ -1,6 +1,8 @@
 package clockface
 
 import (
+	"fmt"
+	"io"
 	"math"
 	"time"
 )
@@ -17,7 +19,7 @@ const clockCenterY = 150
 
 // SecondHand is the unit vector of the second hand of an analogue clock
 // at time `t` represented as a Point
-func SecondHand(t time.Time) Point {
+func SecondHand(w io.Writer, t time.Time) {
 	p := SecondHandPoint(t)
 	// scale
 	p = Point{p.X * secondHandLength, p.Y * secondHandLength}
@@ -26,8 +28,8 @@ func SecondHand(t time.Time) Point {
 	// translate
 	p = Point{p.X + clockCenterX, p.Y + clockCenterY}
 
-	// return Point{150, 60}
-	return p
+	// write point to writer
+	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#f00;stroke-width:3px;"/>`, p.X, p.Y)
 }
 
 func SecondsInRadians(t time.Time) float64 {
