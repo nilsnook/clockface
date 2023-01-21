@@ -7,6 +7,14 @@ import (
 	"time"
 )
 
+func simpleTime(hours, minutes, seconds int) time.Time {
+	return time.Date(2023, time.January, 28, hours, minutes, seconds, 0, time.UTC)
+}
+
+func testName(t time.Time) string {
+	return t.Format("15:04:05")
+}
+
 func TestSecondsInRadians(t *testing.T) {
 	cases := []struct {
 		time  time.Time
@@ -29,14 +37,6 @@ func TestSecondsInRadians(t *testing.T) {
 	}
 }
 
-func simpleTime(hours, minutes, seconds int) time.Time {
-	return time.Date(2023, time.January, 28, hours, minutes, seconds, 0, time.UTC)
-}
-
-func testName(t time.Time) string {
-	return t.Format("15:04:05")
-}
-
 func TestSecondHandVector(t *testing.T) {
 	cases := []struct {
 		time  time.Time
@@ -52,6 +52,26 @@ func TestSecondHandVector(t *testing.T) {
 			want := c.point
 
 			if !roughlyEqualPoint(got, want) {
+				t.Fatalf("got %v, want %v", got, want)
+			}
+		})
+	}
+}
+
+func TestMinuteHandInRadians(t *testing.T) {
+	cases := []struct {
+		time  time.Time
+		angle float64
+	}{
+		{simpleTime(0, 30, 0), math.Pi},
+		{simpleTime(0, 0, 7), (math.Pi / (30 * 60)) * 7},
+	}
+
+	for _, c := range cases {
+		t.Run(testName(c.time), func(t *testing.T) {
+			got := clockface.MinutesInRadians(c.time)
+			want := c.angle
+			if got != want {
 				t.Fatalf("got %v, want %v", got, want)
 			}
 		})
