@@ -59,3 +59,18 @@ func MinutesInRadians(t time.Time) float64 {
 func MinuteHandPoint(t time.Time) Point {
 	return angleToPoint(MinutesInRadians(t))
 }
+
+// MinuteHand writes the SVG line for minute hand of an analogue clock
+// at time `t` represented as a Point
+func MinuteHand(w io.Writer, t time.Time) {
+	p := MinuteHandPoint(t)
+	// scale
+	p = Point{p.X * minuteHandLength, p.Y * minuteHandLength}
+	// flip
+	p = Point{p.X, -p.Y}
+	// translate
+	p = Point{p.X + clockCenterX, p.Y + clockCenterY}
+
+	// write point to writer
+	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:7px;"/>`, p.X, p.Y)
+}
