@@ -36,17 +36,22 @@ func SecondHandPoint(t time.Time) Point {
 	return angleToPoint(SecondsInRadians(t))
 }
 
-// SecondHand writes the SVG line for second hand of an analogue clock
-// at time `t` represented as a Point
-func SecondHand(w io.Writer, t time.Time) {
-	p := SecondHandPoint(t)
+func makeHand(p Point, length float64) Point {
 	// scale
-	p = Point{p.X * secondHandLength, p.Y * secondHandLength}
+	p = Point{p.X * length, p.Y * length}
 	// flip
 	p = Point{p.X, -p.Y}
 	// translate
 	p = Point{p.X + clockCenterX, p.Y + clockCenterY}
 
+	return p
+}
+
+// SecondHand writes the SVG line for second hand of an analogue clock
+// at time `t` represented as a Point
+func SecondHand(w io.Writer, t time.Time) {
+	// make second hand
+	p := makeHand(SecondHandPoint(t), secondHandLength)
 	// write point to writer
 	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#f00;stroke-width:3px;"/>`, p.X, p.Y)
 }
@@ -63,14 +68,8 @@ func MinuteHandPoint(t time.Time) Point {
 // MinuteHand writes the SVG line for minute hand of an analogue clock
 // at time `t` represented as a Point
 func MinuteHand(w io.Writer, t time.Time) {
-	p := MinuteHandPoint(t)
-	// scale
-	p = Point{p.X * minuteHandLength, p.Y * minuteHandLength}
-	// flip
-	p = Point{p.X, -p.Y}
-	// translate
-	p = Point{p.X + clockCenterX, p.Y + clockCenterY}
-
+	// make minute hand
+	p := makeHand(MinuteHandPoint(t), minuteHandLength)
 	// write point to writer
 	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:7px;"/>`, p.X, p.Y)
 }
