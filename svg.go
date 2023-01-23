@@ -34,6 +34,7 @@ func WriteSVG(w io.Writer, t time.Time) {
 	io.WriteString(w, bezel)
 	SecondHand(w, t)
 	MinuteHand(w, t)
+	HourHand(w, t)
 	io.WriteString(w, svgEnd)
 }
 

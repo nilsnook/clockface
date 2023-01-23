@@ -85,29 +85,29 @@ func TestSVGWriterMinuteHand(t *testing.T) {
 	}
 }
 
-// // Test SVG for hour hand
-// func TestSVGWriterHourHand(t *testing.T) {
-// 	cases := []struct {
-// 		time time.Time
-// 		line clockface.Line
-// 	}{
-// 		{simpleTime(6, 0, 0), clockface.Line{150, 150, 150, 200}},
-// 	}
-//
-// 	for _, c := range cases {
-// 		t.Run(testName(c.time), func(t *testing.T) {
-// 			b := bytes.Buffer{}
-// 			clockface.WriteSVG(&b, c.time)
-//
-// 			svg := clockface.SVG{}
-// 			xml.Unmarshal(b.Bytes(), &svg)
-//
-// 			if !containsLine(c.line, svg.Line) {
-// 				t.Errorf("In the SVG output with Lines %+v, wanted a hour hand line %+v", svg.Line, c.line)
-// 			}
-// 		})
-// 	}
-// }
+// Test SVG for hour hand
+func TestSVGWriterHourHand(t *testing.T) {
+	cases := []struct {
+		time time.Time
+		line clockface.Line
+	}{
+		{simpleTime(6, 0, 0), clockface.Line{150, 150, 150, 200}},
+	}
+
+	for _, c := range cases {
+		t.Run(testName(c.time), func(t *testing.T) {
+			b := bytes.Buffer{}
+			clockface.WriteSVG(&b, c.time)
+
+			svg := clockface.SVG{}
+			xml.Unmarshal(b.Bytes(), &svg)
+
+			if !containsLine(c.line, svg.Line) {
+				t.Errorf("In the SVG output with Lines %+v, wanted a hour hand line %+v", svg.Line, c.line)
+			}
+		})
+	}
+}
 
 func containsLine(l clockface.Line, lines []clockface.Line) bool {
 	for _, line := range lines {

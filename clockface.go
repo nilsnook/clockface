@@ -18,6 +18,7 @@ const (
 	clockCenterY     = 150
 	secondHandLength = 90
 	minuteHandLength = 80
+	hourHandLength   = 50
 )
 
 func angleToPoint(angle float64) Point {
@@ -71,7 +72,7 @@ func MinuteHand(w io.Writer, t time.Time) {
 	// make minute hand
 	p := makeHand(MinuteHandPoint(t), minuteHandLength)
 	// write point to writer
-	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:7px;"/>`, p.X, p.Y)
+	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#222;stroke-width:5px;"/>`, p.X, p.Y)
 }
 
 func HoursInRadians(t time.Time) float64 {
@@ -80,4 +81,13 @@ func HoursInRadians(t time.Time) float64 {
 
 func HourHandPoint(t time.Time) Point {
 	return angleToPoint(HoursInRadians(t))
+}
+
+// HourHand writes the SVG line for the hour hand of an analogue clock
+// at time `t` represented as a point
+func HourHand(w io.Writer, t time.Time) {
+	// make hour hand
+	p := makeHand(HourHandPoint(t), hourHandLength)
+	// write point to writer
+	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:7px;"/>`, p.X, p.Y)
 }
