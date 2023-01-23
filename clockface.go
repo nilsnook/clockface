@@ -19,6 +19,13 @@ const (
 	secondHandLength = 90
 	minuteHandLength = 80
 	hourHandLength   = 50
+
+	secondsInHalfClock = 30
+	secondsInClock     = 2 * secondsInHalfClock
+	minutesInHalfClock = 30
+	minutesInClock     = 2 * minutesInHalfClock
+	hoursInHalfClock   = 6
+	hoursInClock       = 2 * hoursInHalfClock
 )
 
 func angleToPoint(angle float64) Point {
@@ -41,7 +48,7 @@ func makeHand(p Point, length float64) Point {
 
 func SecondsInRadians(t time.Time) float64 {
 	// return float64(t.Second()) * (math.Pi / 30)
-	return (math.Pi / (30 / float64(t.Second())))
+	return (math.Pi / (secondsInHalfClock / float64(t.Second())))
 }
 
 func SecondHandPoint(t time.Time) Point {
@@ -58,8 +65,8 @@ func SecondHand(w io.Writer, t time.Time) {
 }
 
 func MinutesInRadians(t time.Time) float64 {
-	return (SecondsInRadians(t) / 60) +
-		(math.Pi / (30 / float64(t.Minute())))
+	return (SecondsInRadians(t) / secondsInClock) +
+		(math.Pi / (minutesInHalfClock / float64(t.Minute())))
 }
 
 func MinuteHandPoint(t time.Time) Point {
@@ -76,7 +83,7 @@ func MinuteHand(w io.Writer, t time.Time) {
 }
 
 func HoursInRadians(t time.Time) float64 {
-	return (MinutesInRadians(t) / 12) + (math.Pi / (6 / float64(t.Hour()%12)))
+	return (MinutesInRadians(t) / hoursInClock) + (math.Pi / (hoursInHalfClock / float64(t.Hour()%12)))
 }
 
 func HourHandPoint(t time.Time) Point {
