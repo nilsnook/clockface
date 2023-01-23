@@ -99,6 +99,27 @@ func TestMinuteHandPoint(t *testing.T) {
 	}
 }
 
+func TestHourHandInRadians(t *testing.T) {
+	cases := []struct {
+		time  time.Time
+		angle float64
+	}{
+		{simpleTime(6, 0, 0), math.Pi},
+		{simpleTime(0, 0, 0), 0},
+		{simpleTime(21, 0, 0), math.Pi * 1.5},
+	}
+
+	for _, c := range cases {
+		t.Run(testName(c.time), func(t *testing.T) {
+			got := clockface.HoursInRadians(c.time)
+			want := c.angle
+			if got != want {
+				t.Errorf("got %v, want %v", got, want)
+			}
+		})
+	}
+}
+
 func roughlyEqualFloat64(a, b float64) bool {
 	const equalityThreshold = 1e-7
 	return math.Abs(a-b) < equalityThreshold

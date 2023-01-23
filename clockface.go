@@ -27,15 +27,6 @@ func angleToPoint(angle float64) Point {
 	return Point{x, y}
 }
 
-func SecondsInRadians(t time.Time) float64 {
-	// return float64(t.Second()) * (math.Pi / 30)
-	return (math.Pi / (30 / float64(t.Second())))
-}
-
-func SecondHandPoint(t time.Time) Point {
-	return angleToPoint(SecondsInRadians(t))
-}
-
 func makeHand(p Point, length float64) Point {
 	// scale
 	p = Point{p.X * length, p.Y * length}
@@ -45,6 +36,15 @@ func makeHand(p Point, length float64) Point {
 	p = Point{p.X + clockCenterX, p.Y + clockCenterY}
 
 	return p
+}
+
+func SecondsInRadians(t time.Time) float64 {
+	// return float64(t.Second()) * (math.Pi / 30)
+	return (math.Pi / (30 / float64(t.Second())))
+}
+
+func SecondHandPoint(t time.Time) Point {
+	return angleToPoint(SecondsInRadians(t))
 }
 
 // SecondHand writes the SVG line for second hand of an analogue clock
@@ -72,4 +72,8 @@ func MinuteHand(w io.Writer, t time.Time) {
 	p := makeHand(MinuteHandPoint(t), minuteHandLength)
 	// write point to writer
 	fmt.Fprintf(w, `<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#000;stroke-width:7px;"/>`, p.X, p.Y)
+}
+
+func HoursInRadians(t time.Time) float64 {
+	return (math.Pi / (6 / float64(t.Hour()%12)))
 }
