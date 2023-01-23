@@ -30,14 +30,14 @@ func TestSecondsInRadians(t *testing.T) {
 		t.Run(testName(c.time), func(t *testing.T) {
 			got := clockface.SecondsInRadians(c.time)
 			want := c.angle
-			if got != want {
+			if !roughlyEqualFloat64(got, want) {
 				t.Fatalf("got %v, want %v", got, want)
 			}
 		})
 	}
 }
 
-func TestSecondHandVector(t *testing.T) {
+func TestSecondHandPoint(t *testing.T) {
 	cases := []struct {
 		time  time.Time
 		point clockface.Point
@@ -71,7 +71,7 @@ func TestMinuteHandInRadians(t *testing.T) {
 		t.Run(testName(c.time), func(t *testing.T) {
 			got := clockface.MinutesInRadians(c.time)
 			want := c.angle
-			if got != want {
+			if !roughlyEqualFloat64(got, want) {
 				t.Fatalf("got %v, want %v", got, want)
 			}
 		})
@@ -107,13 +107,14 @@ func TestHourHandInRadians(t *testing.T) {
 		{simpleTime(6, 0, 0), math.Pi},
 		{simpleTime(0, 0, 0), 0},
 		{simpleTime(21, 0, 0), math.Pi * 1.5},
+		{simpleTime(0, 1, 30), math.Pi / ((6 * 60 * 60) / 90)},
 	}
 
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
 			got := clockface.HoursInRadians(c.time)
 			want := c.angle
-			if got != want {
+			if !roughlyEqualFloat64(got, want) {
 				t.Errorf("got %v, want %v", got, want)
 			}
 		})

@@ -75,5 +75,5 @@ func MinuteHand(w io.Writer, t time.Time) {
 }
 
 func HoursInRadians(t time.Time) float64 {
-	return (math.Pi / (6 / float64(t.Hour()%12)))
+	return (MinutesInRadians(t) / 12) + (math.Pi / (6 / float64(t.Hour()%12)))
 }
